@@ -7,7 +7,7 @@ import WorkerForm from "./WorkerForm.jsx";
 
 const MainWorker = () => {
 
-    const LIMIT = 10;
+    const LIMIT = 5;
 
     const window = useSelector((state) => state.window);
     const token = useSelector((state) => state.token);
@@ -25,15 +25,8 @@ const MainWorker = () => {
     const [total, setTotal] = useState([]);
 
     const getWorkers = async () => {
-        const request = await fetch(`http://localhost:3030/user`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                start: start,
-                limit: LIMIT
-            })
+        const request = await fetch(`http://localhost:3030/user/list?page=${page}&limit=${LIMIT}`,{
+            method: "GET"
         });
 
         const {count, data} = await request.json();
