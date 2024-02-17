@@ -115,7 +115,7 @@ const MainService = () => {
     }
 
     useEffect(() => {
-        dispatch(setwindow({_window: 'services'}));
+        dispatch(setWindow({_window: 'services'}));
     },[]);
     useEffect(() => {
         getServices();

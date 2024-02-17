@@ -1,24 +1,13 @@
 import {
-    Box, Grid, Pagination, Paper, Table,
+    Box, Grid, Paper, Table,
     TableBody, TableCell, TableContainer, TableRow
 } from "@mui/material";
 import Worker from "./Worker.jsx";
-import Loader from "../../../components/Loader.jsx";
 import TableToolbar from "../../../components/TableToolbar.jsx";
 import TableHeaders from "../../../components/TableHeaders.jsx";
+import PaginationBar from "../../../components/PaginationBar.jsx";
 
-const Workers = ({
-                     limit,
-                     workers,
-                     deleteWorkers,
-                     page,
-                     setPage,
-                     countPagging,
-                     selected,
-                     setSelected,
-                     setDataEdit,
-                     total
-                 }) => {
+const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, selected, setSelected, setDataEdit }) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -107,9 +96,11 @@ const Workers = ({
                             alignContent: "center",
                             height: 60
                         }}>
-                            <Pagination count={countPagging} page={page}
-                                        onChange={(event, actualPage) => setPage(actualPage)} size="large"
-                                        color="primary" shape="rounded" variant="outlined"/>
+                            <PaginationBar
+                                totalPages={countPagging}
+                                page={page}
+                                setPage={setPage}
+                            />
                         </Box>
                     </Paper>
                 </Box>

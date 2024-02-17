@@ -6,6 +6,7 @@ import {setWindow} from "../../../state/authStore.js";
 import urlConfig from "../../../url.config.json";
 import Workers from "./Workers.jsx";
 import WorkerForm from "./WorkerForm.jsx";
+import BottomNotification from "../../../components/BottomNotification.jsx";
 
 const MainWorker = () => {
 
@@ -25,7 +26,6 @@ const MainWorker = () => {
     const [openNotification, setOpenNotification] = useState(false);
     const [typeNotification, setTypeNotification] = useState('success');
     const [notificationMessage, setNotificationMessage] = useState('');
-    const [total, setTotal] = useState([]);
 
     const getWorkers = async () => {
         const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}`,{
@@ -127,29 +127,10 @@ const MainWorker = () => {
         await getWorkers()
         response && setSelected([])
     }
-    const getTotal = async () => {
-        const resultData = await fetch(`${config.url}/user/totals`, {
-            method: "GET"
-        });
-
-        const result = await resultData.json();
-
-        setTotal(result);
-    }
-
-    const handleCloseNotification = (event, reason) => {
-        if (reason === "clickaway")
-            return;
-
-        setOpenNotification(false);
-    }
 
     useEffect(() => {
         dispatch(setWindow({_window: 'workers'}));
     }, []);
-    useEffect(() => {
-        getTotal();
-    }, [workers])
     useEffect(() => {
         setStart(page !== 1 ? page * LIMIT - LIMIT : 0)
     }, [page]);
@@ -173,7 +154,6 @@ const MainWorker = () => {
                             selected={selected}
                             setSelected={setSelected}
                             setDataEdit={setDataEdit}
-                            total={total}
                         />
                     }
                 />
@@ -197,12 +177,12 @@ const MainWorker = () => {
                     }
                 />
             </Routes>
-            <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleCloseNotification}>
-                <Alert onClose={handleCloseNotification} severity={typeNotification} sx={{width: '100%'}}
-                       variant="filled">
-                    {notificationMessage}
-                </Alert>
-            </Snackbar>
+            <BottomNotification
+                notificationMessage={notificationMessage}
+                typeNotification={typeNotification}
+                openNotification={openNotification}
+                setOpenNotification={setOpenNotification}
+            />
         </>
     )
 }
