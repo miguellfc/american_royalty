@@ -16,7 +16,6 @@
     "@mui/material": "^5.14.10",
     "@mui/x-charts": "^6.18.0",
     "@mui/x-date-pickers": "^6.18.2",
-    "@nivo/radial-bar": "^0.84.0",
     "@reduxjs/toolkit": "^1.9.5",
     "date-and-time": "^3.0.3",
     "dayjs": "^1.11.10",
