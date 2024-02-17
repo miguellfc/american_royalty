@@ -1,24 +1,27 @@
-import {alpha, IconButton, Toolbar, Tooltip, Typography, useTheme} from "@mui/material";
-import {AddBox, DeleteForever, FilterList, FilterListOff} from "@mui/icons-material";
+import {alpha, Box, IconButton, InputBase, Toolbar, Tooltip, Typography, useTheme} from "@mui/material";
+import {AddBox, DeleteForever, Search, SearchOffOutlined} from "@mui/icons-material";
 import {useSelector} from "react-redux";
 import ModalDelete from "./ModalDelete.jsx";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import FlexBetween from "./FlexBetween.jsx";
 
-const TableToolbar = ({ selections, deleteData, message }) => {
+const TableToolbar = ({ selections, deleteData, message, search, setSearch }) => {
 
     const numSelected = selections.length
 
     const theme = useTheme();
     const navigate = useNavigate();
-    const _window = useSelector((state) => state._window)
-
-    const [openModal, setOpenModal] = useState(false);
+    const _window = useSelector((state) => state._window);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+    const neutralLight = theme.palette.neutral.light;
 
     return (
         <Toolbar
             sx={{
+                display: "flex",
+                justifyContent: "space-between",
                 p1: {sm: 2},
                 pr: {xs: 1, sm: 1},
                 ...(numSelected > 0 && {
@@ -28,7 +31,7 @@ const TableToolbar = ({ selections, deleteData, message }) => {
         >
             {numSelected > 0 ? (
                 <Typography
-                    sx={{flex: '1 1 100%'}}
+                    width="100px"
                     color="inherit"
                     variant="subtitle1"
                     component="div"
@@ -37,7 +40,7 @@ const TableToolbar = ({ selections, deleteData, message }) => {
                 </Typography>
             ) : (
                 <Typography
-                    sx={{flex: '1 1 100%'}}
+                    width="100px"
                     variant="h3"
                     id="tableTitle"
                     component="div"
@@ -56,22 +59,52 @@ const TableToolbar = ({ selections, deleteData, message }) => {
                     }
                 </Typography>
             )}
-            <Tooltip title="Agregar">
-                <IconButton
-                    onClick={() => navigate("create")}
-                    sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }}
-                >
-                    <AddBox/>
+            <FlexBetween
+                backgroundColor={
+                    numSelected > 0
+                        ? (theme) => alpha(theme.palette.secondary.main, theme.palette.action.activatedOpacity)
+                        : neutralLight
+                }
+                borderRadius="10px"
+                gap="3rem"
+                padding="0.1rem 2rem"
+            >
+                <InputBase
+                    placeholder="Search..."
+                    onChange={(event) => setSearch(event.target.value)}
+                    value={search}
+                />
+                <IconButton>
+                    {
+                        search !== ''
+                            ? (
+                                <SearchOffOutlined
+                                    onClick={(event) => setSearch('')}
+                                />
+                            ) : (
+                                <Search />
+                            )
+                    }
                 </IconButton>
-            </Tooltip>
-            <Tooltip title="Delete">
-                <IconButton
-                    sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }}
-                    disabled={numSelected === 0}
-                >
-                    <DeleteForever onClick={() => setOpenDeleteModal(!openDeleteModal)}/>
-                </IconButton>
-            </Tooltip>
+            </FlexBetween>
+            <Box>
+                <Tooltip title="Agregar">
+                    <IconButton
+                        onClick={() => navigate("create")}
+                        sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }}
+                    >
+                        <AddBox/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete">
+                    <IconButton
+                        sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }}
+                        disabled={numSelected === 0}
+                    >
+                        <DeleteForever onClick={() => setOpenDeleteModal(!openDeleteModal)}/>
+                    </IconButton>
+                </Tooltip>
+            </Box>
             <ModalDelete
                 openModal={openDeleteModal}
                 handleModal={() => setOpenDeleteModal(!openDeleteModal)}

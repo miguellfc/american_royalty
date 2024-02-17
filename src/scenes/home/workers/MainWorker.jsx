@@ -18,6 +18,8 @@ const MainWorker = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [workers, setWorkers] = useState([]);
+    const [search, setSearch] = useState('');
+    const [role, setRole] = useState(-1);
     const [dataEdit, setDataEdit] = useState(null);
     const [start, setStart] = useState(0);
     const [countPagging, setCountPagging] = useState(1);
@@ -28,7 +30,7 @@ const MainWorker = () => {
     const [notificationMessage, setNotificationMessage] = useState('');
 
     const getWorkers = async () => {
-        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}`,{
+        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}&search=${search}&role=${role}`,{
             method: "GET"
         });
 
@@ -136,7 +138,7 @@ const MainWorker = () => {
     }, [page]);
     useEffect(() => {
         getWorkers()
-    }, [start]);
+    }, [start, search, role]);
 
     return (
         <>
@@ -154,6 +156,9 @@ const MainWorker = () => {
                             selected={selected}
                             setSelected={setSelected}
                             setDataEdit={setDataEdit}
+                            search={search}
+                            setSearch={setSearch}
+                            setRole={setRole}
                         />
                     }
                 />

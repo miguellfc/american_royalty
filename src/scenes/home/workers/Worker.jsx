@@ -27,7 +27,7 @@ import CheckBox from "@mui/material/Checkbox";
 import {useNavigate} from "react-router-dom";
 import {stringAvatar, stringToColor} from "../../../utils/functions.js";
 
-const Worker = ({isSelected, handleClick, deleteData, index, setDataEdit, data}) => {
+const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data, setRole }) => {
 
     const {id_usuario, email, nombre, apellido, foto, password, telefono, usuario, id_rol, rol} = data;
 
@@ -62,8 +62,8 @@ const Worker = ({isSelected, handleClick, deleteData, index, setDataEdit, data})
             <TableCell>
                 {
                     foto === ""
-                        ? <Avatar { ...stringAvatar(`${nombre} ${apellido}`)} />
-                        : <Avatar alt="Imagen del usuario" src={`http://localhost:3030/assets/${foto}`} />
+                        ? <Avatar {...stringAvatar(`${nombre} ${apellido}`)} />
+                        : <Avatar alt="Imagen del usuario" src={`http://localhost:3030/assets/${foto}`}/>
                 }
             </TableCell>
             <TableCell
@@ -77,30 +77,41 @@ const Worker = ({isSelected, handleClick, deleteData, index, setDataEdit, data})
                 </Typography>
             </TableCell>
             <TableCell>
-                <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "start"}}>
-                    <Mail sx={{ marginRight: 0.5 }} />
+                <Box sx={{display: "flex", flexDirection: "row", justifyContent: "start"}}>
+                    <Mail sx={{marginRight: 0.5}}/>
                     <Typography>
                         {email}
                     </Typography>
                 </Box>
             </TableCell>
             <TableCell>
-                <Chip variant="filled" color="primary" icon={
-                    (() => {
-                        switch (rol) {
-                            case "Administrador":
-                                return <AdminPanelSettings/>;
-                            case "Operadora":
-                                return <SupportAgent/>
-                            default:
-                                return <Engineering/>;
-                        }
-                    })()
-                } label={rol}/>
+                <Chip
+                    sx={{
+                        cursor: "pointer",
+                    }}
+                    variant="filled"
+                    color="primary"
+                    icon={
+                        (() => {
+                            switch (rol) {
+                                case "Administrador":
+                                    return <AdminPanelSettings/>;
+                                case "Operadora":
+                                    return <SupportAgent/>
+                                default:
+                                    return <Engineering/>;
+                            }
+                        })()
+                    }
+                    label={rol}
+                    onDoubleClick={(event) => setRole((role) => {
+                        return role === id_rol ? -1 : id_rol
+                    })}
+                />
             </TableCell>
             <TableCell>
-                <Box sx={{ display: "flex", flexDirection: "row"}}>
-                    <LocalPhone sx={{ marginRight: 0.5 }} />
+                <Box sx={{display: "flex", flexDirection: "row"}}>
+                    <LocalPhone sx={{marginRight: 0.5}}/>
                     <Typography>
                         {telefono}
                     </Typography>
@@ -109,14 +120,14 @@ const Worker = ({isSelected, handleClick, deleteData, index, setDataEdit, data})
             <TableCell>
                 <Tooltip title="Modificar">
                     <IconButton onClick={eventClick}>
-                        <Create sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }} />
+                        <Create sx={{color: theme.palette.mode === 'dark' ? 'white' : '#444444'}}/>
                     </IconButton>
                 </Tooltip>
             </TableCell>
             <TableCell>
                 <Tooltip title="Eliminar">
-                    <IconButton onClick={() => setOpenModalDelete(!openModalDelete)} >
-                        <Delete sx={{ color: theme.palette.mode === 'dark' ? 'white' : '#444444' }} />
+                    <IconButton onClick={() => setOpenModalDelete(!openModalDelete)}>
+                        <Delete sx={{color: theme.palette.mode === 'dark' ? 'white' : '#444444'}}/>
                     </IconButton>
                 </Tooltip>
             </TableCell>

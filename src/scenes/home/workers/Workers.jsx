@@ -7,7 +7,9 @@ import TableToolbar from "../../../components/TableToolbar.jsx";
 import TableHeaders from "../../../components/TableHeaders.jsx";
 import PaginationBar from "../../../components/PaginationBar.jsx";
 
-const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, selected, setSelected, setDataEdit }) => {
+const Workers = (
+    { limit, workers, deleteWorkers, page, setPage, countPagging, selected, setSelected, setDataEdit, search, setSearch, setRole }
+) => {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -50,6 +52,8 @@ const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, s
                             selections={selected}
                             deleteData={deleteWorkers}
                             message="Está seguro que desea eliminar los trabajadores seleccionados?"
+                            search={search}
+                            setSearch={setSearch}
                         />
                         <TableContainer>
                             <Table
@@ -73,6 +77,7 @@ const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, s
                                                 index={index}
                                                 setDataEdit={setDataEdit}
                                                 data={row}
+                                                setRole={setRole}
                                             />
                                         ))
                                     }
