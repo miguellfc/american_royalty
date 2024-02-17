@@ -1,50 +1,25 @@
-import {useEffect, useMemo, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setWindow} from "../../../state/authStore.js";
 import {
-    Alert,
-    Box,
-    Grid,
-    IconButton,
-    Pagination,
-    PaginationItem,
-    Paper,
-    Snackbar, Table, TableBody, TableCell,
-    TableContainer, TableRow,
-    Tooltip, Typography, useTheme
+    Box, Grid, Pagination, Paper, Table,
+    TableBody, TableCell, TableContainer, TableRow
 } from "@mui/material";
 import Worker from "./Worker.jsx";
 import Loader from "../../../components/Loader.jsx";
-import {
-    AddBox,
-    ChevronLeft,
-    ChevronRight,
-    Create,
-    Delete,
-    DeleteForever,
-    DoneAll,
-    HistoryToggleOff,
-    Info
-} from "@mui/icons-material";
-import WorkerChart from "../../charts/WorkerChart.jsx";
-import ModalDelete from "../../../components/ModalDelete.jsx";
-import Tabla from "../../../components/Tabla.jsx";
 import TableToolbar from "../../../components/TableToolbar.jsx";
 import TableHeaders from "../../../components/TableHeaders.jsx";
-import CheckBox from "@mui/material/Checkbox";
-import {useNavigate} from "react-router-dom";
-import WorkerRank from "../../charts/WorkerRank.jsx";
 
-const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, selected, setSelected, setOpenNotification, notificationMessage, openNotification, typeNotification, setDataEdit, total }) => {
+const Workers = ({
+                     limit,
+                     workers,
+                     deleteWorkers,
+                     page,
+                     setPage,
+                     countPagging,
+                     selected,
+                     setSelected,
+                     setDataEdit,
+                     total
+                 }) => {
 
-    const navigate = useNavigate();
-
-    const handleCloseNotification = (event, reason) => {
-        if (reason === "clickaway")
-            return;
-
-        setOpenNotification(false);
-    }
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = workers.map((n) => n.id_usuario);
@@ -59,7 +34,7 @@ const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, s
         let newSelected = [];
 
         selectedIndex === -1
-            ? newSelected = [ ...selected, id ]
+            ? newSelected = [...selected, id]
             : newSelected = selected.filter((select) => {
                 return select !== id;
             })
@@ -100,16 +75,18 @@ const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, s
                                     rowCount={workers.length}
                                 />
                                 <TableBody>
-                                    {workers.map((row, index) => (
-                                        <Worker
-                                            isSelected={isSelected}
-                                            handleClick={handleClick}
-                                            deleteData={deleteWorkers}
-                                            index={index}
-                                            setDataEdit={setDataEdit}
-                                            data={row}
-                                        />
-                                    ))}
+                                    {
+                                        workers.map((row, index) => (
+                                            <Worker
+                                                isSelected={isSelected}
+                                                handleClick={handleClick}
+                                                deleteData={deleteWorkers}
+                                                index={index}
+                                                setDataEdit={setDataEdit}
+                                                data={row}
+                                            />
+                                        ))
+                                    }
                                     {emptyRows > 0 && (
                                         <TableRow
                                             style={{
@@ -130,16 +107,12 @@ const Workers = ({ limit, workers, deleteWorkers, page, setPage, countPagging, s
                             alignContent: "center",
                             height: 60
                         }}>
-                            <Pagination count={countPagging} page={page} onChange={(event, actualPage) => setPage(actualPage)} size="large" color="primary" shape="rounded" variant="outlined"/>
+                            <Pagination count={countPagging} page={page}
+                                        onChange={(event, actualPage) => setPage(actualPage)} size="large"
+                                        color="primary" shape="rounded" variant="outlined"/>
                         </Box>
                     </Paper>
                 </Box>
-                <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleCloseNotification}>
-                    <Alert onClose={handleCloseNotification} severity={typeNotification} sx={{width: '100%'}}
-                           variant="filled">
-                        {notificationMessage}
-                    </Alert>
-                </Snackbar>
             </Grid>
         </>
     )

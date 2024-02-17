@@ -1,3 +1,4 @@
+import {Snackbar, Alert} from "@mui/material";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
@@ -57,7 +58,7 @@ const MainWorker = () => {
             },
             body: JSON.stringify(formData)
         });
-        const response = await createResponse.json();
+        const response = await createResponse.ok;
 
         setNotificationMessage(response
             ? 'El usuario ha sido agregado satisfactoriamente!!'
@@ -136,6 +137,13 @@ const MainWorker = () => {
         setTotal(result);
     }
 
+    const handleCloseNotification = (event, reason) => {
+        if (reason === "clickaway")
+            return;
+
+        setOpenNotification(false);
+    }
+
     useEffect(() => {
         dispatch(setWindow({_window: 'workers'}));
     }, []);
@@ -164,10 +172,6 @@ const MainWorker = () => {
                             countPagging={countPagging}
                             selected={selected}
                             setSelected={setSelected}
-                            setOpenNotification={setOpenNotification}
-                            notificationMessage={notificationMessage}
-                            openNotification={openNotification}
-                            typeNotification={typeNotification}
                             setDataEdit={setDataEdit}
                             total={total}
                         />
@@ -193,6 +197,12 @@ const MainWorker = () => {
                     }
                 />
             </Routes>
+            <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleCloseNotification}>
+                <Alert onClose={handleCloseNotification} severity={typeNotification} sx={{width: '100%'}}
+                       variant="filled">
+                    {notificationMessage}
+                </Alert>
+            </Snackbar>
         </>
     )
 }
