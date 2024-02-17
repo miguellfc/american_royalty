@@ -4,7 +4,7 @@ const initialState = {
     mode: "light",
     user: "facu",
     token: null,
-    window: 'request'
+    _window: 'request'
 }
 
 export const authSlice = createSlice({
@@ -23,7 +23,7 @@ export const authSlice = createSlice({
             state.token = null
         },
         setWindow: (state,action) => {
-            state.window = action.payload.window
+            state._window = action.payload._window
         }
     }
 })

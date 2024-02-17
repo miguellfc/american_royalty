@@ -2,6 +2,7 @@ import {Route, Routes, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setWindow} from "../../../state/authStore.js";
+import urlConfig from "../../../url.config.json";
 import Workers from "./Workers.jsx";
 import WorkerForm from "./WorkerForm.jsx";
 
@@ -9,7 +10,8 @@ const MainWorker = () => {
 
     const LIMIT = 5;
 
-    const window = useSelector((state) => state.window);
+    const config = urlConfig.config
+    const _window = useSelector((state) => state._window);
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -25,7 +27,7 @@ const MainWorker = () => {
     const [total, setTotal] = useState([]);
 
     const getWorkers = async () => {
-        const request = await fetch(`http://localhost:3030/user/list?page=${page}&limit=${LIMIT}`,{
+        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}`,{
             method: "GET"
         });
 
@@ -36,25 +38,26 @@ const MainWorker = () => {
     }
     const createWorker = async (values, onSubmitProps) => {
 
-        const formData = new FormData();
+        const formData = {};
 
-        for (let value in values) {
-            if (value === 'foto' && values[value] === '')
+        for (let key in values) {
+            if (key === 'foto' && values[key] === '')
                 continue;
 
-            formData.append(value, values[value]);
+            formData[key] = values[key];
         }
 
-        formData.append('fotoPath', values.foto !== "" ? values.foto.name : values.foto);
+        formData.fotoPath = values.foto !== "" ? values.foto.name : values.foto;
 
-        const createResponse = await fetch(`http://localhost:3030/user/create`, {
+        const createResponse = await fetch(`${config.url}/user/create`,{
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
             },
-            body: formData
+            body: JSON.stringify(formData)
         });
-        const response = createResponse.ok;
+        const response = await createResponse.json();
 
         setNotificationMessage(response
             ? 'El usuario ha sido agregado satisfactoriamente!!'
@@ -83,7 +86,7 @@ const MainWorker = () => {
         }
         formData.append('fotoPath', typeof values.foto !== "string" ? values.foto.name : values.foto);
 
-        const updateResponse = await fetch(`http://localhost:3030/user/update/${id_usuario}`, {
+        const updateResponse = await fetch(`${config.url}/user/update/${id_usuario}`, {
             method: "PATCH",
             body: formData
         });
@@ -104,7 +107,7 @@ const MainWorker = () => {
         }
     }
     const deleteWorkers = async (selections) => {
-        const result = await fetch(`http://localhost:3030/user/delete/${selections}`, {
+        const result = await fetch(`${config.url}/user/delete/${selections}`, {
             method: "DELETE"
         })
         const response = result.ok
@@ -124,7 +127,7 @@ const MainWorker = () => {
         response && setSelected([])
     }
     const getTotal = async () => {
-        const resultData = await fetch(`http://localhost:3030/user/totals`, {
+        const resultData = await fetch(`${config.url}/user/totals`, {
             method: "GET"
         });
 
@@ -134,7 +137,7 @@ const MainWorker = () => {
     }
 
     useEffect(() => {
-        dispatch(setWindow({window: 'workers'}));
+        dispatch(setWindow({_window: 'workers'}));
     }, []);
     useEffect(() => {
         getTotal();

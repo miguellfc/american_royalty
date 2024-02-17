@@ -9,7 +9,7 @@ const MainService = () => {
 
     const LIMIT = 10;
 
-    const window = useSelector((state) => state.window);
+    const _window = useSelector((state) => state._window);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [services, setServices] = useState([]);
@@ -115,7 +115,7 @@ const MainService = () => {
     }
 
     useEffect(() => {
-        dispatch(setWindow({window: 'services'}));
+        dispatch(setwindow({_window: 'services'}));
     },[]);
     useEffect(() => {
         getServices();

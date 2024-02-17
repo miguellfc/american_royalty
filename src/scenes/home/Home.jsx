@@ -35,7 +35,7 @@ const Home = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const window = useSelector((state) => state.window)
+    const _window = useSelector((state) => state._window)
     const user = useSelector((state) => state.user)
     const nombre = user.rows[0].nombre
     const apellido = user.rows[0].apellido

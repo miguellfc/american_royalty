@@ -54,7 +54,7 @@ const Tabla = ({headCells}) => {
     const [dense, setDense] = useState(false);
     const [rowsPerPage, setRowsPerPage] = useState(3);
     const [countPage, setCountPage] = useState(1);
-    const window = useSelector((state) => state.window)
+    const _window = useSelector((state) => state._window)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';

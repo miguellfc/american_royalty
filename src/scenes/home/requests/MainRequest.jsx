@@ -9,7 +9,7 @@ const MainRequest = () => {
 
     const LIMIT = 10;
 
-    const window = useSelector((state) => state.window);
+    const _window = useSelector((state) => state._window);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
@@ -115,7 +115,7 @@ const MainRequest = () => {
     }
 
     useEffect(() => {
-        dispatch(setWindow({window: 'requests'}));
+        dispatch(setWindow({_window: 'requests'}));
     }, []);
     useEffect(() => {
         setStart(page !== 1 ? page * LIMIT - LIMIT : 0)

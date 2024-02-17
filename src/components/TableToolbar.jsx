@@ -11,7 +11,7 @@ const TableToolbar = ({ selections, deleteData, message }) => {
 
     const theme = useTheme();
     const navigate = useNavigate();
-    const window = useSelector((state) => state.window)
+    const _window = useSelector((state) => state._window)
 
     const [openModal, setOpenModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -44,7 +44,7 @@ const TableToolbar = ({ selections, deleteData, message }) => {
                 >
                     {
                         (() => {
-                            switch (window) {
+                            switch (_window) {
                                 case 'workers':
                                     return "Trabajadores";
                                 case 'services':
