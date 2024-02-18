@@ -33,6 +33,7 @@ const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data,
 
     const theme = useTheme();
     const navigate = useNavigate();
+    const [filtering, setFiltering] = useState(false);
     const [openModalDelete, setOpenModalDelete] = useState(false);
 
     const eventClick = () => {
@@ -85,29 +86,34 @@ const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data,
                 </Box>
             </TableCell>
             <TableCell>
-                <Chip
-                    sx={{
-                        cursor: "pointer",
-                    }}
-                    variant="filled"
-                    color="primary"
-                    icon={
-                        (() => {
-                            switch (rol) {
-                                case "Administrador":
-                                    return <AdminPanelSettings/>;
-                                case "Operadora":
-                                    return <SupportAgent/>
-                                default:
-                                    return <Engineering/>;
-                            }
-                        })()
-                    }
-                    label={rol}
-                    onDoubleClick={(event) => setRole((role) => {
-                        return role === id_rol ? -1 : id_rol
-                    })}
-                />
+                <Tooltip title={!filtering ? `Filter by ${rol}` : 'Clear filter'}>
+                    <Chip
+                        sx={{
+                            cursor: "pointer",
+                        }}
+                        variant="filled"
+                        color="primary"
+                        icon={
+                            (() => {
+                                switch (rol) {
+                                    case "Administrador":
+                                        return <AdminPanelSettings/>;
+                                    case "Operadora":
+                                        return <SupportAgent/>
+                                    default:
+                                        return <Engineering/>;
+                                }
+                            })()
+                        }
+                        label={rol}
+                        onClick={(event) => {
+                            setRole((role) => {
+                                return role === id_rol ? -1 : id_rol
+                            });
+                            setFiltering(!filtering);
+                        }}
+                    />
+                </Tooltip>
             </TableCell>
             <TableCell>
                 <Box sx={{display: "flex", flexDirection: "row"}}>

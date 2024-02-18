@@ -20,9 +20,6 @@ import BestServices from "./BestServices.jsx";
 
 const Dashboard = () => {
 
-    const theme = useTheme();
-
-
     return (
         <>
             <Grid item xs={12} md={12} lg={4}>

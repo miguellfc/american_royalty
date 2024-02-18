@@ -1,7 +1,7 @@
 import { useState} from "react";
 import {
     Avatar, Box, Button, Checkbox, CssBaseline, FormControlLabel, Tooltip,
-    Grid, IconButton, InputAdornment, Link, Paper, TextField, Typography, useMediaQuery, useTheme
+    Grid, IconButton, InputAdornment, Paper, TextField, Typography, useMediaQuery, useTheme
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Formik } from "formik";
@@ -38,7 +38,6 @@ const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const [showPassword, setShowPassword] = useState(false);
-    const isNonMobile = useMediaQuery("(min-width: 500px)")
     const login = async (values, onSubmitProps) => {
 
         const loggedInResponse = await fetch("http://localhost:3030/auth/login", {
@@ -159,7 +158,7 @@ const Login = () => {
                                 />
                                 <FormControlLabel
                                     control={<Checkbox value="remember" color="primary" />}
-                                    label="Remember me"
+                                    label="Remind me"
                                 />
                                 <Button
                                     type="submit"
