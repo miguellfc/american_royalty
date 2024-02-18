@@ -6,13 +6,21 @@ const BottomNotification = ({ notificationMessage, typeNotification, openNotific
         if (reason === "clickaway")
             return;
 
-        setOpenNotification(false);
+        setOpenNotification({ _open: false });
     }
 
     return (
-        <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleCloseNotification}>
-            <Alert onClose={handleCloseNotification} severity={typeNotification} sx={{width: '100%'}}
-                   variant="filled">
+        <Snackbar
+            open={openNotification}
+            autoHideDuration={4000}
+            onClose={handleCloseNotification}
+        >
+            <Alert
+                onClose={handleCloseNotification}
+                severity={typeNotification}
+                sx={{ width: '100%' }}
+                variant="filled"
+            >
                 {notificationMessage}
             </Alert>
         </Snackbar>

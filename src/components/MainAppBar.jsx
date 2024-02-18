@@ -7,7 +7,7 @@ import AppBar from "../scenes/bars/AppBar.jsx";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
-const MainAppBar = ({ open, toggleDrawer}) => {
+const MainAppBar = ({ open, toggleDrawer }) => {
 
     const theme = useTheme();
     const navigate = useNavigate();

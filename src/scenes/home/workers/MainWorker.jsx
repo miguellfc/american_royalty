@@ -7,6 +7,7 @@ import urlConfig from "../../../url.config.json";
 import Workers from "./Workers.jsx";
 import WorkerForm from "./WorkerForm.jsx";
 import BottomNotification from "../../../components/BottomNotification.jsx";
+import useNotification from "../../../hooks/useNotification.jsx";
 
 const MainWorker = () => {
 
@@ -25,9 +26,7 @@ const MainWorker = () => {
     const [countPagging, setCountPagging] = useState(1);
     const [selected, setSelected] = useState([]);
     const [page, setPage] = useState(1);
-    const [openNotification, setOpenNotification] = useState(false);
-    const [typeNotification, setTypeNotification] = useState('success');
-    const [notificationMessage, setNotificationMessage] = useState('');
+    const [_open, _type, _notification, controlNotification] = useNotification();
 
     const getWorkers = async () => {
         const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}&search=${search}&role=${role}`,{
@@ -62,12 +61,14 @@ const MainWorker = () => {
         });
         const response = await createResponse.ok;
 
-        setNotificationMessage(response
-            ? 'El usuario ha sido agregado satisfactoriamente!!'
-            : 'Upss, ha ocurrido un error al agregar el usuario!!'
-        );
-        setTypeNotification(response ? 'success' : 'error');
-        setOpenNotification(true);
+        const options = {
+            _notification: response
+                ? 'El usuario ha sido agregado satisfactoriamente!!'
+                : 'Upss, ha ocurrido un error al agregar el usuario!!',
+            _type: response ? 'success' : 'error',
+            _open: true
+        }
+        controlNotification(options);
 
         if (response) {
             getWorkers();
@@ -79,32 +80,34 @@ const MainWorker = () => {
 
         const {id_usuario} = values;
 
-        const formData = new FormData();
-        for (let value in values) {
-            if (value === 'foto' && typeof values[value] === "string") {
+        const formData = {};
+        for (let key in values) {
+            if (key === 'foto' && typeof values[key] === "string") {
                 continue;
             }
-            formData.append(value, values[value]);
+            formData[key] = values[key];
 
         }
-        formData.append('fotoPath', typeof values.foto !== "string" ? values.foto.name : values.foto);
+        formData.fotoPath = typeof values.foto !== "string" ? values.foto.name : values.foto;
 
         const updateResponse = await fetch(`${config.url}/user/update/${id_usuario}`, {
             method: "PATCH",
-            body: formData
+            body: JSON.stringify(formData)
         });
         const response = updateResponse.ok;
-        setDataEdit(null);
 
-        setNotificationMessage(response
-            ? 'El usuario ha sido modificado satisfactoriamente!!'
-            : 'Upss, ha ocurrido un error al modificar el usuario!!'
-        );
-        setTypeNotification(response ? 'success' : 'error');
-        setOpenNotification(true);
+        const options = {
+            _notification: response
+                ? 'El usuario ha sido modificado satisfactoriamente!!'
+                : 'Upss, ha ocurrido un error al modificar el usuario!!',
+            _type: response ? 'success' : 'error',
+            _open: true
+        }
+        controlNotification(options);
 
         if (response) {
             getWorkers();
+            setDataEdit(null);
             onSubmitProps.resetForm();
             navigate("/home/workers");
         }
@@ -112,22 +115,26 @@ const MainWorker = () => {
     const deleteWorkers = async (selections) => {
         const result = await fetch(`${config.url}/user/delete/${selections}`, {
             method: "DELETE"
-        })
-        const response = result.ok
+        });
+        const response = result.ok;
 
-        setNotificationMessage(response
-            ? `${selections.length > 1
-                ? 'Los usuarios han sido eliminados satisfactoriamente!!'
-                : 'El usuario ha sido eliminado satisfactoriamente!!'}`
-            : `Upss, ha ocurrido un error al eliminar ${selections.length > 1
-                ? 'los usuarios!!'
-                : 'el usuario!!'}`
-        )
-        setTypeNotification(response ? 'success' : 'error')
-        setOpenNotification(true)
+        const options = {
+            _notification: response
+                ? `${selections.length > 1
+                    ? 'Los usuarios han sido eliminados satisfactoriamente!!'
+                    : 'El usuario ha sido eliminado satisfactoriamente!!'}`
+                : `Upss, ha ocurrido un error al eliminar ${selections.length > 1
+                    ? 'los usuarios!!'
+                    : 'el usuario!!'}`,
+            _type: response ? 'success' : 'error',
+            _open: true
+        }
+        controlNotification(options);
 
-        await getWorkers()
-        response && setSelected([])
+        if (response) {
+            await getWorkers();
+            setSelected([]);
+        }
     }
 
     useEffect(() => {
@@ -183,10 +190,10 @@ const MainWorker = () => {
                 />
             </Routes>
             <BottomNotification
-                notificationMessage={notificationMessage}
-                typeNotification={typeNotification}
-                openNotification={openNotification}
-                setOpenNotification={setOpenNotification}
+                notificationMessage={_notification}
+                typeNotification={_type}
+                openNotification={_open}
+                setOpenNotification={controlNotification}
             />
         </>
     )
