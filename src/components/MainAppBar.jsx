@@ -5,18 +5,19 @@ import {setLogout, setMode} from "../state/authStore.js";
 import {stringAvatar} from "../utils/functions.js";
 import AppBar from "../scenes/bars/AppBar.jsx";
 import {useNavigate} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const MainAppBar = ({ open, toggleDrawer}) => {
 
     const theme = useTheme();
     const navigate = useNavigate();
-    const isNonMobileScreens = useMediaQuery("(min-width: 850px)");
+    const dispatch = useDispatch();
     const user = useSelector((state) => state.user)
+    const isNonMobileScreens = useMediaQuery("(min-width: 850px)");
 
-    const nombre = user.rows[0].nombre
-    const apellido = user.rows[0].apellido
-    const foto = user.rows[0].foto
+    const firstName = user.rows[0].nombre
+    const lastName = user.rows[0].apellido
+    const photo = user.rows[0].foto
 
     return (
         <AppBar position="absolute" open={open}>
@@ -78,9 +79,9 @@ const MainAppBar = ({ open, toggleDrawer}) => {
                         </Box>
                         <Box marginX={1}>
                             {
-                                foto === ""
-                                    ? <Avatar { ...stringAvatar(`${nombre} ${apellido}`)} />
-                                    : <Avatar alt="Imagen del usuario" src={`http://localhost:3030/assets/${foto}`} />
+                                photo === ""
+                                    ? <Avatar { ...stringAvatar(`${firstName} ${lastName}`)} />
+                                    : <Avatar alt="Imagen del usuario" src={`http://localhost:3030/assets/${photo}`} />
                             }
                         </Box>
                         <Box marginX={1}>
