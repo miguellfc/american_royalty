@@ -71,8 +71,8 @@ const MainAppBar = ({ open, toggleDrawer}) => {
                             <Tooltip title={theme.palette.mode === 'dark' ? "Light Mode" : "Dark Mode"}>
                                 <IconButton onClick={() => dispatch(setMode())}>
                                     {theme.palette.mode === "dark"
-                                        ? (<DarkMode sx={{ fontSize: "25px" }}/>)
-                                        : (<LightMode sx={{ color: "white", fontSize: "25px" }}/>)
+                                        ? (<DarkMode sx={{ fontSize: "30px" }}/>)
+                                        : (<LightMode sx={{ color: "white", fontSize: "30px" }}/>)
                                     }
                                 </IconButton>
                             </Tooltip>
@@ -92,8 +92,8 @@ const MainAppBar = ({ open, toggleDrawer}) => {
                                 >
                                     <Logout
                                         sx={{
-                                            height: '25px',
-                                            width: '25px',
+                                            height: '30px',
+                                            width: '30px',
                                         }}
                                     />
                                 </IconButton>
