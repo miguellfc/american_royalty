@@ -6,13 +6,13 @@ const useNotification = () => {
     const [notification, setNotification] = useState('');
 
     const controlNotification = ({_notification, _type, _open}) => {
-        if (_notification !== null )
+        if (_notification !== undefined )
             setNotification(_notification);
 
-        if (_type !== null)
+        if (_type !== undefined)
             setType(_type);
 
-        if (_open !== null)
+        if (_open !== undefined)
             setOpen(_open);
     }
 
