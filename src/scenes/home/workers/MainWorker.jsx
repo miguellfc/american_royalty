@@ -8,10 +8,9 @@ import Workers from "./Workers.jsx";
 import WorkerForm from "./WorkerForm.jsx";
 import BottomNotification from "../../../components/BottomNotification.jsx";
 import useNotification from "../../../hooks/useNotification.jsx";
+import usePagination from "../../../hooks/usePagination.jsx";
 
 const MainWorker = () => {
-
-    const LIMIT = 5;
 
     const config = urlConfig.config
     const _window = useSelector((state) => state._window);
@@ -22,21 +21,19 @@ const MainWorker = () => {
     const [search, setSearch] = useState('');
     const [role, setRole] = useState(-1);
     const [dataEdit, setDataEdit] = useState(null);
-    const [start, setStart] = useState(0);
-    const [countPagging, setCountPagging] = useState(1);
     const [selected, setSelected] = useState([]);
-    const [page, setPage] = useState(1);
-    const [_open, _type, _notification, controlNotification] = useNotification();
+    const [start,limit,page,total,controlPagination] = usePagination();
+    const [_open,_type,_notification,controlNotification] = useNotification();
 
     const getWorkers = async () => {
-        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${LIMIT}&search=${search}&role=${role}`,{
+        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${limit}&search=${search}&role=${role}`,{
             method: "GET"
         });
 
         const {count, data} = await request.json();
 
-        setWorkers(data)
-        setCountPagging(count < LIMIT ? 1 : (count % LIMIT === 0 ? (count / LIMIT) : (Math.floor(count / LIMIT) + 1)));
+        setWorkers(data);
+        controlPagination({ _total: count });
     }
     const createWorker = async (values, onSubmitProps) => {
 
@@ -141,9 +138,6 @@ const MainWorker = () => {
         dispatch(setWindow({_window: 'workers'}));
     }, []);
     useEffect(() => {
-        setStart(page !== 1 ? page * LIMIT - LIMIT : 0)
-    }, [page]);
-    useEffect(() => {
         getWorkers()
     }, [start, search, role]);
 
@@ -154,12 +148,12 @@ const MainWorker = () => {
                     path="/"
                     element={
                         <Workers
-                            limit={LIMIT}
                             workers={workers}
                             deleteWorkers={deleteWorkers}
                             page={page}
-                            setPage={setPage}
-                            countPagging={countPagging}
+                            limit={limit}
+                            total={total}
+                            controlPagination={controlPagination}
                             selected={selected}
                             setSelected={setSelected}
                             setDataEdit={setDataEdit}

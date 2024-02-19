@@ -8,7 +8,7 @@ import TableHeaders from "../../../components/TableHeaders.jsx";
 import PaginationBar from "../../../components/PaginationBar.jsx";
 
 const Workers = (
-    { limit, workers, deleteWorkers, page, setPage, countPagging, selected, setSelected, setDataEdit, search, setSearch, setRole }
+    { workers, deleteWorkers, page, limit, total, controlPagination, /*setPage, countPagging,*/ selected, setSelected, setDataEdit, search, setSearch, setRole }
 ) => {
 
     const handleSelectAllClick = (event) => {
@@ -102,9 +102,9 @@ const Workers = (
                             height: 60
                         }}>
                             <PaginationBar
-                                totalPages={countPagging}
+                                totalPages={total}
                                 page={page}
-                                setPage={setPage}
+                                setPage={controlPagination}
                             />
                         </Box>
                     </Paper>

@@ -6,7 +6,7 @@ const PaginationBar = ({ totalPages, page, setPage }) => {
         <Pagination
             count={totalPages}
             page={page}
-            onChange={(event, actualPage) => setPage(actualPage)}
+            onChange={(event, actualPage) => setPage({ _page: actualPage})}
             size="large"
             color="primary"
             shape="rounded"
