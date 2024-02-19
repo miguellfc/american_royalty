@@ -1,18 +1,16 @@
 import {alpha, Box, IconButton, InputBase, Toolbar, Tooltip, Typography, useTheme} from "@mui/material";
 import {AddBox, DeleteForever, Search, SearchOffOutlined} from "@mui/icons-material";
-import {useSelector} from "react-redux";
 import ModalDelete from "./ModalDelete.jsx";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import FlexBetween from "./FlexBetween.jsx";
 
-const TableToolbar = ({ selections, deleteData, message, search, setSearch }) => {
+const TableToolbar = ({ title, selections, deleteData, message, filter, setFilter }) => {
 
     const numSelected = selections.length
 
     const theme = useTheme();
     const navigate = useNavigate();
-    const _window = useSelector((state) => state._window);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const neutralLight = theme.palette.neutral.light;
@@ -45,18 +43,7 @@ const TableToolbar = ({ selections, deleteData, message, search, setSearch }) =>
                     id="tableTitle"
                     component="div"
                 >
-                    {
-                        (() => {
-                            switch (_window) {
-                                case 'workers':
-                                    return "Trabajadores";
-                                case 'services':
-                                    return "Servicios";
-                                default:
-                                    return "Solicitudes";
-                            }
-                        })()
-                    }
+                    {title}
                 </Typography>
             )}
             <FlexBetween
@@ -71,15 +58,15 @@ const TableToolbar = ({ selections, deleteData, message, search, setSearch }) =>
             >
                 <InputBase
                     placeholder="Search..."
-                    onChange={(event) => setSearch(event.target.value)}
-                    value={search}
+                    onChange={(event) => setFilter({ ...filter, search: event.target.value })}
+                    value={filter.search}
                 />
                 <IconButton>
                     {
-                        search !== ''
+                        filter.search !== ''
                             ? (
                                 <SearchOffOutlined
-                                    onClick={(event) => setSearch('')}
+                                    onClick={(event) => setFilter({ ...filter, search: '' })}
                                 />
                             ) : (
                                 <Search />

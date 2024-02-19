@@ -8,7 +8,7 @@ import TableHeaders from "../../../components/TableHeaders.jsx";
 import PaginationBar from "../../../components/PaginationBar.jsx";
 
 const Workers = (
-    { workers, deleteWorkers, page, limit, total, controlPagination, /*setPage, countPagging,*/ selected, setSelected, setDataEdit, search, setSearch, setRole }
+    { workers, deleteWorkers, page, limit, total, controlPagination, selected, setSelected, setDataEdit, filter, setFilter }
 ) => {
 
     const handleSelectAllClick = (event) => {
@@ -35,13 +35,7 @@ const Workers = (
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     const emptyRows = limit - workers.length;
-    const columns = [
-        {field: "foto", headerName: "Avatar"},
-        {field: "fullName", headerName: "Nombre y Apellido"},
-        {field: "email", headerName: "Email"},
-        {field: "rol", headerName: "Puesto"},
-        {field: "telf", headerName: "Phone"}
-    ];
+    const columns = ["Avatar", "Nombre y Apellido", "Email", "Puesto", "Phone"];
 
     return (
         <>
@@ -49,11 +43,12 @@ const Workers = (
                 <Box sx={{width: '100%'}}>
                     <Paper sx={{width: '100%', mb: 2}}>
                         <TableToolbar
+                            title="Trabajadores"
                             selections={selected}
                             deleteData={deleteWorkers}
                             message="Está seguro que desea eliminar los trabajadores seleccionados?"
-                            search={search}
-                            setSearch={setSearch}
+                            filter={filter}
+                            setFilter={setFilter}
                         />
                         <TableContainer>
                             <Table
@@ -77,7 +72,7 @@ const Workers = (
                                                 index={index}
                                                 setDataEdit={setDataEdit}
                                                 data={row}
-                                                setRole={setRole}
+                                                setFilter={setFilter}
                                             />
                                         ))
                                     }
@@ -113,4 +108,5 @@ const Workers = (
         </>
     )
 }
-export default Workers
+
+export default Workers;

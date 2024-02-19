@@ -1,6 +1,5 @@
-import { Box, TableCell, TableRow, TableSortLabel } from "@mui/material";
+import { TableCell, TableRow} from "@mui/material";
 import CheckBox from "@mui/material/Checkbox";
-import {visuallyHidden} from "@mui/utils";
 
 const TableHeaders = ({onSelectAllClick, numSelected, rowCount, headCells = [] }) => {
 
@@ -19,7 +18,7 @@ const TableHeaders = ({onSelectAllClick, numSelected, rowCount, headCells = [] }
             </TableCell>
             {headCells.map((headCell) => (
                 <TableCell>
-                    {headCell.headerName}
+                    {headCell}
                 </TableCell>
             ))}
         </TableRow>

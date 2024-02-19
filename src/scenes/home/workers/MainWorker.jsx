@@ -13,20 +13,20 @@ import usePagination from "../../../hooks/usePagination.jsx";
 const MainWorker = () => {
 
     const config = urlConfig.config
-    const _window = useSelector((state) => state._window);
     const token = useSelector((state) => state.token);
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [filter, setFilter] = useState({
+        search: '',
+        role: -1
+    });
     const [workers, setWorkers] = useState([]);
-    const [search, setSearch] = useState('');
-    const [role, setRole] = useState(-1);
     const [dataEdit, setDataEdit] = useState(null);
     const [selected, setSelected] = useState([]);
     const [start,limit,page,total,controlPagination] = usePagination();
     const [_open,_type,_notification,controlNotification] = useNotification();
 
     const getWorkers = async () => {
-        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${limit}&search=${search}&role=${role}`,{
+        const request = await fetch(`${config.url}/user/list?page=${page}&limit=${limit}&search=${filter.search}&role=${filter.role}`,{
             method: "GET"
         });
 
@@ -135,11 +135,8 @@ const MainWorker = () => {
     }
 
     useEffect(() => {
-        dispatch(setWindow({_window: 'workers'}));
-    }, []);
-    useEffect(() => {
         getWorkers()
-    }, [start, search, role]);
+    }, [start, filter]);
 
     return (
         <>
@@ -157,9 +154,8 @@ const MainWorker = () => {
                             selected={selected}
                             setSelected={setSelected}
                             setDataEdit={setDataEdit}
-                            search={search}
-                            setSearch={setSearch}
-                            setRole={setRole}
+                            filter={filter}
+                            setFilter={setFilter}
                         />
                     }
                 />

@@ -27,7 +27,7 @@ import CheckBox from "@mui/material/Checkbox";
 import {useNavigate} from "react-router-dom";
 import {stringAvatar, stringToColor} from "../../../utils/functions.js";
 
-const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data, setRole }) => {
+const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data, setFilter }) => {
 
     const {id_usuario, email, nombre, apellido, foto, password, telefono, usuario, id_rol, rol} = data;
 
@@ -107,8 +107,11 @@ const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data,
                         }
                         label={rol}
                         onClick={(event) => {
-                            setRole((role) => {
-                                return role === id_rol ? -1 : id_rol
+                            setFilter((filter) => {
+                                return {
+                                    ...filter,
+                                    role: filter.role === id_rol ? -1 : id_rol
+                                }
                             });
                             setFiltering(!filtering);
                         }}
