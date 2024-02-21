@@ -1,24 +1,13 @@
 import * as yup from "yup";
 import {
-    Box, Button,
-    FormControl,
-    IconButton,
-    InputAdornment,
-    InputLabel, MenuItem,
-    Paper,
-    Select,
-    TextField,
-    Typography, useTheme
+    Box, Button, FormControl, IconButton,
+    InputAdornment, InputLabel, MenuItem,
+    Paper, Select, TextField, Typography, useTheme
 } from "@mui/material";
 import FlexBetween from "../../../components/FlexBetween.jsx";
 import {
-    AlternateEmail,
-    Close,
-    EditOutlined,
-    MailOutline,
-    PhoneOutlined,
-    Visibility,
-    VisibilityOff
+    AddCircle, AlternateEmail, ChangeCircle, EditOutlined,
+    MailOutline, PhoneOutlined, RemoveCircle, Visibility, VisibilityOff
 } from "@mui/icons-material";
 import {Formik} from "formik";
 import Dropzone from "react-dropzone";
@@ -33,7 +22,7 @@ const workerSchema = yup.object().shape({
     apellido: yup.string().required("This field is required"),
     foto: yup.string(),
     password: yup.string().required("This field is required"),
-    telefono: yup.string().matches(phoneNumberRules, { message: "Invalid phone number!"}).required("This field is required"),
+    telefono: yup.string().matches(phoneNumberRules, {message: "Invalid phone number!"}).required("This field is required"),
     usuario: yup.string().required("This field is required"),
     id_rol: yup.number().required("This field is required")
 });
@@ -53,7 +42,7 @@ const WorkerForm = ({ create, update, data = null }) => {
 
     const theme = useTheme()
     const navigate = useNavigate();
-    const [visible,setVisible] = useState(false)
+    const [visible, setVisible] = useState(false)
     const [roles, setRoles] = useState([]);
 
     const handleFormSubmit = async (values, onSubmitProps) => {

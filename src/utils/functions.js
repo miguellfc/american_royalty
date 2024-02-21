@@ -21,9 +21,11 @@ export const stringAvatar = (name) => {
     return {
         sx: {
             bgcolor: stringToColor(name),
-        }, children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+        },
+        children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`
     };
 }
+
 export const searchAddress = async (latlng) => {
 
     const {lat, lng} = latlng;
@@ -32,10 +34,12 @@ export const searchAddress = async (latlng) => {
 
     return await response.json();
 }
+
 export const hexToRGBA = (hex, opacity) => {
     let rgb = hexToRGB(hex);
     return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
 }
+
 const hexToRGB = (hex) => {
     let r = parseInt(hex.slice(1, 3),16),
         g = parseInt(hex.slice(3, 5),16),
