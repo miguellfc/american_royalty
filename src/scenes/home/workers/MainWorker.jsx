@@ -15,13 +15,13 @@ const MainWorker = () => {
     const config = urlConfig.config
     const token = useSelector((state) => state.token);
     const navigate = useNavigate();
+    const [workers, setWorkers] = useState([]);
+    const [dataEdit, setDataEdit] = useState(null);
+    const [selected, setSelected] = useState([]);
     const [filter, setFilter] = useState({
         search: '',
         role: -1
     });
-    const [workers, setWorkers] = useState([]);
-    const [dataEdit, setDataEdit] = useState(null);
-    const [selected, setSelected] = useState([]);
     const [start,limit,page,total,controlPagination] = usePagination();
     const [_open,_type,_notification,controlNotification] = useNotification();
 
@@ -37,24 +37,23 @@ const MainWorker = () => {
     }
     const createWorker = async (values, onSubmitProps) => {
 
-        const formData = {};
+        const formData = new FormData();
 
         for (let key in values) {
             if (key === 'foto' && values[key] === '')
                 continue;
 
-            formData[key] = values[key];
+            formData.append(key, values[key]);
         }
 
-        formData.fotoPath = values.foto !== "" ? values.foto.name : values.foto;
+        formData.append('fotoPath', values.foto !== "" ? values.foto.name : values.foto);
 
         const createResponse = await fetch(`${config.url}/user/create`,{
             method: "POST",
             headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
+                Authorization: `Bearer ${token}`
             },
-            body: JSON.stringify(formData)
+            body: formData
         });
         const response = await createResponse.ok;
 
@@ -77,19 +76,19 @@ const MainWorker = () => {
 
         const {id_usuario} = values;
 
-        const formData = {};
+        const formData = new FormData();
+
         for (let key in values) {
-            if (key === 'foto' && typeof values[key] === "string") {
+            if (key === 'foto' && typeof values[key] === "string")
                 continue;
-            }
-            formData[key] = values[key];
 
+            formData.append(key, values[key]);
         }
-        formData.fotoPath = typeof values.foto !== "string" ? values.foto.name : values.foto;
+        formData.append('fotoPath',typeof values.foto !== "string" ? values.foto.name : values.foto);
 
-        const updateResponse = await fetch(`${config.url}/user/update/${id_usuario}`, {
+        const updateResponse = await fetch(`${config.url}/user/update/${id_usuario}`,{
             method: "PATCH",
-            body: JSON.stringify(formData)
+            body: formData
         });
         const response = updateResponse.ok;
 
