@@ -8,7 +8,10 @@ import TableHeaders from "../../../components/TableHeaders.jsx";
 import PaginationBar from "../../../components/PaginationBar.jsx";
 
 const Workers = (
-    { workers, deleteWorkers, page, limit, total, controlPagination, selected, setSelected, setDataEdit, filter, setFilter }
+    {
+        workers, deleteWorkers, page, limit, total, controlPagination, selected,
+        setSelected, setDataEdit, filter, setFilter
+    }
 ) => {
 
     const handleSelectAllClick = (event) => {
@@ -26,9 +29,7 @@ const Workers = (
 
         selectedIndex === -1
             ? newSelected = [...selected, id]
-            : newSelected = selected.filter((select) => {
-                return select !== id;
-            })
+            : newSelected = selected.filter((select) => select !== id );
 
         setSelected(newSelected);
     };

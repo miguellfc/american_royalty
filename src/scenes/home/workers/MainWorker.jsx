@@ -55,19 +55,19 @@ const MainWorker = () => {
         });
         const response = await createResponse.ok;
 
-        const options = {
+        controlNotification({
             _notification: response
                 ? 'El usuario ha sido agregado satisfactoriamente!!'
                 : 'Upss, ha ocurrido un error al agregar el usuario!!',
             _type: response ? 'success' : 'error',
             _open: true
-        }
-        controlNotification(options);
+        });
 
         if (response) {
-            getWorkers();
+            await getWorkers();
             onSubmitProps.resetForm();
-            navigate("/home/workers")
+            navigate("/home/workers");
+            setDataEdit(null);
         }
     }
     const updateWorker = async (values, onSubmitProps) => {
@@ -90,17 +90,16 @@ const MainWorker = () => {
         });
         const response = updateResponse.ok;
 
-        const options = {
+        controlNotification({
             _notification: response
                 ? 'El usuario ha sido modificado satisfactoriamente!!'
                 : 'Upss, ha ocurrido un error al modificar el usuario!!',
             _type: response ? 'success' : 'error',
             _open: true
-        }
-        controlNotification(options);
+        });
 
         if (response) {
-            getWorkers();
+            await getWorkers();
             setDataEdit(null);
             onSubmitProps.resetForm();
             navigate("/home/workers");
