@@ -16,20 +16,18 @@ import {
 } from "@mui/material";
 import Request from "./Request.jsx";
 import TableHeaders from "../../../components/TableHeaders.jsx";
-import workers from "../workers/Workers.jsx";
 import TableToolbar from "../../../components/TableToolbar.jsx";
 import {useNavigate} from "react-router-dom";
+import PaginationBar from "../../../components/PaginationBar.jsx";
 
-const Requests = ({ limit, requests, deleteRequest, page, setPage, countPagging, selected, setSelected, setOpenNotification, notificationMessage, openNotification, typeNotification, setDataEdit}) => {
+const Requests = (
+    {
+        requests, deleteRequest, page, limit, total, controlPagination, selected, setSelected, setDataEdit, filter, setFilter
+    }
+) => {
 
     const navigate = useNavigate();
 
-    const handleCloseNotification = (event, reason) => {
-        if (reason === "clickaway")
-            return;
-
-        setOpenNotification(false);
-    }
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
             const newSelected = requests.map((n) => n.id_solicitud);
@@ -43,32 +41,17 @@ const Requests = ({ limit, requests, deleteRequest, page, setPage, countPagging,
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1)
-            );
-        }
+        selectedIndex === -1
+            ? newSelected = [...selected, id]
+            : newSelected = selected.filter((select) => select !== id );
+
         setSelected(newSelected);
     };
     const isSelected = (id) => selected.indexOf(id) !== -1;
 
     const emptyRows = limit - requests.length;
-
     const columns = [
-        {field: "nombre_cliente", headerName: "Cliente"},
-        {field: "telf_cliente", headerName: "Teléfono"},
-        {field: "estado", headerName: "Estado"},
-        {field: "direccion", headerName: "Dirección"},
-        {field: "direccion", headerName: "Precio Total"},
-        {field: "trabajador", headerName: "Encargado"},
-        {field: "fecha", headerName: "Fecha"},
+        "Cliente", "Teléfono", "Estado", "Dirección", "Precio Total", "Encargado", "Fecha"
     ];
 
     return (
@@ -80,6 +63,8 @@ const Requests = ({ limit, requests, deleteRequest, page, setPage, countPagging,
                             selections={selected}
                             deleteData={deleteRequest}
                             message="Está seguro que desea eliminar las solicitudes seleccionadas?"
+                            filter={filter}
+                            setFilter={setFilter}
                         />
                         <TableContainer>
                             <Table
@@ -124,16 +109,14 @@ const Requests = ({ limit, requests, deleteRequest, page, setPage, countPagging,
                             alignContent: "center",
                             height: 60
                         }}>
-                            <Pagination count={countPagging} page={page} onChange={(event,actualPage) => setPage(actualPage)} size="large" color="primary" shape="rounded" variant="outlined" />
+                            <PaginationBar
+                                totalPages={total}
+                                page={page}
+                                setPage={controlPagination}
+                            />
                         </Box>
                     </Paper>
                 </Box>
-                <Snackbar open={openNotification} autoHideDuration={4000} onClose={handleCloseNotification}>
-                    <Alert onClose={handleCloseNotification} severity={typeNotification} sx={{width: '100%'}}
-                           variant="filled">
-                        {notificationMessage}
-                    </Alert>
-                </Snackbar>
             </Grid>
         </>
     )

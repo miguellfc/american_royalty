@@ -1,42 +1,40 @@
 import {Route, Routes, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setWindow} from "../../../state/authStore.js";
 import Requests from "./Requests.jsx";
 import RequestForm from "./RequestForm.jsx";
+import urlConfig from "../../../url.config.json";
+import usePagination from '../../../hooks/usePagination.jsx';
+import useNotification from '../../../hooks/useNotification.jsx';
+import BottomNotification from "../../../components/BottomNotification.jsx";
 
 const MainRequest = () => {
 
-    const LIMIT = 10;
-
-    const _window = useSelector((state) => state._window);
-    const dispatch = useDispatch();
+    const config = urlConfig.config;
     const navigate = useNavigate();
     const [requests, setRequests] = useState([]);
     const [dataEdit, setDataEdit] = useState(null);
-    const [start, setStart] = useState(0);
-    const [countPagging, setCountPagging] = useState(1);
     const [selected, setSelected] = useState([]);
-    const [page, setPage] = useState(1);
-    const [openNotification, setOpenNotification] = useState(false);
-    const [typeNotification, setTypeNotification] = useState("success");
-    const [notificationMessage, setNotificationMessage] = useState("");
+    const [filter, setFilter] = useState({
+        search: ''
+    })
+    const [start, limit, page, total, controlPagination] = usePagination();
+    const [_open, _type, _notification, controlNotification] = useNotification();
 
     const getRequests = async () => {
-        const response = await fetch('http://localhost:3030/request', {
+        const response = await fetch(`${config.url}/request`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 start: start,
-                limit: LIMIT
+                limit,
             })
         });
         const {count, data} = await response.json();
 
         setRequests(data);
-        setCountPagging(count < LIMIT ? 1 : (count % LIMIT === 0 ? (count / LIMIT) : (Math.floor(count / LIMIT) + 1)));
+        controlPagination(count);
     }
     const createRequest = async (values, onSubmitProps) => {
 
@@ -49,25 +47,25 @@ const MainRequest = () => {
             body: JSON.stringify(values)
         });
         const response = createResponse.ok;
-        setDataEdit(null)
 
-        setNotificationMessage(
-            response
-                ? 'La solicitud ha sido agregada satisfactoriamente!!'
-                : 'Upss, ha ocurrido un error al agregar la solicitud!!'
-        );
-        setTypeNotification(response ? 'success' : 'error');
-        setOpenNotification(true);
+        controlNotification({
+            _notification: response
+                ? 'La solicitud ha sido creada satisfactoriamente!!'
+                : 'Upss, ha ocurrido un error al agregar la solicitud!!',
+            _type: response ? 'success' : 'error',
+            _open: true
+        });
 
         if (response) {
-            getRequests();
+            await getRequests();
             onSubmitProps.resetForm();
-            navigate("/home");
+            navigate("/home/requests");
+            setDataEdit(null)
         }
     }
     const updateRequest = async (values, onSubmitProps) => {
         const { id_solicitud } = values;
-        const updateResponse = await fetch(`http://localhost:3030/request/update/${id_solicitud}`,{
+        const updateResponse = await fetch(`${config.url}/request/update/${id_solicitud}`,{
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -75,51 +73,46 @@ const MainRequest = () => {
             body: JSON.stringify(values)
         });
         const response = updateResponse.ok;
-        setDataEdit(null)
 
-        setNotificationMessage(
-            response
+        controlNotification({
+            _notification: response
                 ? 'La solicitud ha sido modificada satisfactoriamente!!'
-                : 'Upss, ha ocurrido un error al modificar la solicitud!!'
-        );
-        setTypeNotification(response ? 'success' : 'error');
-        setOpenNotification(true);
+                : 'Upss, ha ocurrido un error al modificar la solicitud!!',
+            _type: response ? 'success' : 'error',
+            _open: true
+        });
 
-        getRequests();
         if (response) {
+            await getRequests();
             onSubmitProps.resetForm();
-            navigate("/home");
+            setDataEdit(null)
+            navigate("/home/requests");
         }
     }
     const deleteRequest = async (selections) => {
-        const result = await fetch(`http://localhost:3030/request/delete/${selections}`, {
+        const result = await fetch(`${config.url}/request/delete/${selections}`, {
             method: "DELETE"
         });
         const response = result.ok;
 
-        setNotificationMessage(
-            response
+        controlNotification({
+            _notification: response
                 ? `${selections.length > 1
                     ? 'Las solicitudes han sido eliminadas satisfactoriamente!!'
                     : 'La solicitud ha sido eliminada satisfactoriamente!!'}`
                 : `Upss, ha ocurrido un error al intentar eliminar ${selections.length > 1
                     ? 'las solicitudes seleccionadas!!'
-                    : 'la solicitud!!'}`
-        );
-        setTypeNotification(response ? 'success' : 'error');
-        setOpenNotification(true);
+                    : 'la solicitud!!'}`,
+            _open: response ? 'success' : 'error',
+            _type: true
+        });
 
-        getRequests();
-        setSelected([]);
-        navigate("/home");
+        if (response) {
+            await getRequests();
+            setSelected([]);
+        }
     }
 
-    useEffect(() => {
-        dispatch(setWindow({_window: 'requests'}));
-    }, []);
-    useEffect(() => {
-        setStart(page !== 1 ? page * LIMIT - LIMIT : 0)
-    }, [page]);
     useEffect(() => {
         getRequests();
     }, [start]);
@@ -131,19 +124,17 @@ const MainRequest = () => {
                     path="/"
                     element={
                         <Requests
-                            limit={LIMIT}
                             requests={requests}
                             deleteRequest={deleteRequest}
                             page={page}
-                            setPage={setPage}
-                            countPagging={countPagging}
+                            limit={limit}
+                            total={total}
+                            controlPagination={controlPagination}
                             selected={selected}
                             setSelected={setSelected}
-                            setOpenNotification={setOpenNotification}
-                            notificationMessage={notificationMessage}
-                            openNotification={openNotification}
-                            typeNotification={typeNotification}
                             setDataEdit={setDataEdit}
+                            filter={filter}
+                            setFilter={setFilter}
                         />
                     }
                 />
@@ -168,6 +159,12 @@ const MainRequest = () => {
                     }
                 />
             </Routes>
+            <BottomNotification
+                notificationMessage={_notification}
+                typeNotification={_type}
+                openNotification={_open}
+                setOpenNotification={controlNotification}
+            />
         </>
     )
 }
