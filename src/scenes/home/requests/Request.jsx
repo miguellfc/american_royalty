@@ -55,9 +55,7 @@ const Request = ({isSelected, handleClick, deleteData, index, setDataEdit, data}
         telf_cliente, usuario, nombre, apellido, foto, servicios
     } = data;
 
-    const theme = useTheme();
     const navigate = useNavigate();
-    const [openModal, setOpenModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [display, setDisplay] = useState('');
@@ -231,7 +229,13 @@ const Request = ({isSelected, handleClick, deleteData, index, setDataEdit, data}
                 onClick={handleClose}
             >
                 {
-                    servicios && servicios.map((servicio) => (<MenuItem>{`${servicio.nombre_servicio} - $${servicio.precio_servicio}`}</MenuItem>))
+                    servicios && servicios.map((servicio) =>
+                        (
+                            <MenuItem>
+                                {`${servicio.nombre_servicio} - $${servicio.precio_servicio}`}
+                            </MenuItem>
+                        )
+                    )
                 }
             </Menu>
         </>

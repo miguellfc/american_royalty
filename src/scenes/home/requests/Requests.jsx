@@ -1,32 +1,18 @@
-import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setWindow} from "../../../state/authStore.js";
 import {
-    Alert,
-    Box,
-    Grid,
-    Pagination,
-    Paper,
-    Snackbar,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableRow
+    Box, Grid,Paper,Table, TableBody,
+    TableCell, TableContainer, TableRow
 } from "@mui/material";
 import Request from "./Request.jsx";
 import TableHeaders from "../../../components/TableHeaders.jsx";
 import TableToolbar from "../../../components/TableToolbar.jsx";
-import {useNavigate} from "react-router-dom";
 import PaginationBar from "../../../components/PaginationBar.jsx";
 
 const Requests = (
     {
-        requests, deleteRequest, page, limit, total, controlPagination, selected, setSelected, setDataEdit, filter, setFilter
+        requests, deleteRequest, page, limit, total, controlPagination,
+        selected, setSelected, setDataEdit, filter, setFilter
     }
 ) => {
-
-    const navigate = useNavigate();
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
