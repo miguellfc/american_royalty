@@ -1,35 +1,25 @@
 import {useState} from "react";
 import {
-    Avatar, Box, Chip,
-    Collapse,
-    Grid,
-    IconButton,
-    Paper,
-    TableCell,
-    TableRow,
-    Tooltip,
-    Typography,
-    useTheme
+    Avatar, Box, Chip, IconButton, TableCell,
+    TableRow, Tooltip, Typography, useTheme
 } from "@mui/material";
 import {
-    CheckBoxOutlineBlank,
-    Create,
-    Delete,
-    OpenInFull,
-    CloseFullscreen,
-    Info,
-    Mail,
-    LocalPhone, AdminPanelSettings, AccountCircle, SupportAgent, Engineering
+    Create, Delete, Mail, LocalPhone,
+    AdminPanelSettings, SupportAgent, Engineering
 } from "@mui/icons-material";
-import FlexBetween from "../../../components/FlexBetween.jsx";
 import ModalDelete from "../../../components/ModalDelete.jsx";
 import CheckBox from "@mui/material/Checkbox";
 import {useNavigate} from "react-router-dom";
-import {stringAvatar, stringToColor} from "../../../utils/functions.js";
+import {stringAvatar} from "../../../utils/functions.js";
 
-const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data, setFilter }) => {
+const Worker = (
+    {
+        isSelected, handleClick, deleteData,
+        index, setDataEdit, data, setFilter
+    }
+) => {
 
-    const {id_usuario, email, nombre, apellido, foto, password, telefono, usuario, id_rol, rol} = data;
+    const {id_usuario, email, nombre, apellido, foto, telefono, id_rol, rol} = data;
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -78,7 +68,13 @@ const Worker = ({ isSelected, handleClick, deleteData, index, setDataEdit, data,
                 </Typography>
             </TableCell>
             <TableCell>
-                <Box sx={{display: "flex", flexDirection: "row", justifyContent: "start"}}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "start"
+                    }}
+                >
                     <Mail sx={{marginRight: 0.5}}/>
                     <Typography>
                         {email}
