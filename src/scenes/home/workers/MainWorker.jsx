@@ -1,8 +1,6 @@
-import {Snackbar, Alert} from "@mui/material";
 import {Route, Routes, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setWindow} from "../../../state/authStore.js";
+import {useSelector} from "react-redux";
 import urlConfig from "../../../url.config.json";
 import Workers from "./Workers.jsx";
 import WorkerForm from "./WorkerForm.jsx";
