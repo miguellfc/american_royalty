@@ -1,39 +1,17 @@
 import {
-    Menu,
-    Avatar,
-    Box,
-    Chip,
-    Collapse,
-    IconButton, MenuItem, Table, TableBody,
-    TableCell, TableHead,
-    TableRow,
-    Tooltip,
-    Typography,
-    useTheme
+    Menu, Avatar, Box, Chip, IconButton, MenuItem,
+    TableCell, TableRow, Tooltip, Typography,
 } from "@mui/material";
 import {useEffect, useState} from "react";
 import CheckBox from "@mui/material/Checkbox";
 import {
-    AddBox,
-    Cancel,
-    CheckCircleOutlined,
-    Place,
-    PlayCircleOutlined,
-    QuestionMark,
-    CancelOutlined,
-    PauseCircleOutlined,
-    Event,
-    LocalPhone,
-    Create,
-    Delete,
-    Keyboard,
-    KeyboardDoubleArrowDown, KeyboardDoubleArrowUp
+    CheckCircleOutlined, Place, PlayCircleOutlined, QuestionMark,
+    CancelOutlined, PauseCircleOutlined, Event, LocalPhone, Create,
+    Delete, KeyboardDoubleArrowDown, KeyboardDoubleArrowUp
 } from "@mui/icons-material";
-import {setWindow} from "../../../state/authStore.js";
 import date from "date-and-time";
 import ES from "date-and-time/locale/es";
 import ModalDelete from "../../../components/ModalDelete.jsx";
-import RequestForm from "./RequestForm.jsx";
 import {useNavigate} from "react-router-dom";
 import {searchAddress, stringToColor} from "../../../utils/functions.js";
 
@@ -46,7 +24,11 @@ const stringAvatar = (name) => {
         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
     };
 }
-const Request = ({isSelected, handleClick, deleteData, index, setDataEdit, data}) => {
+const Request = (
+    {
+        isSelected, handleClick, deleteData, index, setDataEdit, data
+    }
+) => {
 
     date.locale(ES);
 
@@ -61,16 +43,16 @@ const Request = ({isSelected, handleClick, deleteData, index, setDataEdit, data}
     const [display, setDisplay] = useState('');
     const open = Boolean(anchorEl);
 
-    useEffect(() => {
-        getAddress();
-    }, []);
-
     const getAddress = async () => {
         const address = await searchAddress(direccion);
         const { road, residential, hamlet, town, city, house_number, county } = address.address;
 
         setDisplay(`${road} #${house_number}, ${city || town || residential || hamlet}, ${county}`);
     }
+
+    useEffect(() => {
+        getAddress();
+        }, []);
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
